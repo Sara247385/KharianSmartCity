@@ -1,0 +1,67 @@
+:root {
+    --bg-dark-command: #0b0f19;
+    --card-dark: #131a26;
+    --border-glow: #1f2c3f;
+    --accent-cyan: #00f2fe;
+    --accent-blue: #0072ff;
+    --text-primary: #e2e8f0;
+    --text-muted: #94a3b8;
+}
+
+body {
+    background-color: var(--bg-dark-command);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.command-card {
+    background-color: var(--card-dark);
+    border: 1px solid var(--border-glow);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.03);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+    .command-card:hover {
+        border-color: var(--accent-cyan);
+        box-shadow: 0 4px 25px rgba(0, 242, 254, 0.1);
+    }
+
+.neon-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.neon-critical {
+    color: #ff0055;
+    background-color: #ff0055;
+}
+
+.neon-warning {
+    color: #ffb300;
+    background-color: #ffb300;
+}
+
+.neon-success {
+    color: #00ffcc;
+    background-color: #00ffcc;
+}
+
+/* Table configurations */
+.table-command {
+    color: var(--text-primary);
+    background-color: var(--card-dark);
+}
+
+    .table-command th {
+        background-color: #1a2333;
+        color: var(--accent-cyan);
+        border-bottom: 2px solid var(--border-glow);
+    }
+
+    .table-command td {
+        border-bottom: 1px solid var(--border-glow);
+    }

@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar d-none d-md-block" style="background-color: #090d14; width: 260px; min-height: 100vh; position: fixed; border-right: 1px solid var(--border-glow);">
+        <NavMenu />
+    </div>
+
+    <main style="margin-left: 260px; padding: 2rem;">
+        <header class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 1px solid var(--border-glow);">
+            <div>
+                <h4 class="fw-bold text-uppercase m-0" style="letter-spacing: 1px; color: var(--text-primary);">
+                    KHARIAN <span style="color: var(--accent-cyan);">COMMAND & CONTROL</span>
+                </h4>
+                <small class="text-muted">Operations Monitoring Network Platform</small>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-danger p-2"><span class="neon-indicator neon-critical me-1"></span>LIVE DEFCON STATUS: ELEVATED</span>
+            </div>
+        </header>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

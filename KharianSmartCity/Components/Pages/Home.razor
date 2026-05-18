@@ -1,0 +1,188 @@
+﻿@page "/"
+@using KharianSmartCity.Models
+@using KharianSmartCity.Services
+@inject IncidentService IncidentService
+
+<PageTitle>Kharian Command Center - Dashboard</PageTitle>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card command-card p-3 position-relative overflow-hidden">
+            <div class="text-muted text-uppercase small fw-bold">Total Logged Cases</div>
+            <div class="display-5 fw-bold my-2 text-white">@TotalIncidents</div>
+            <div class="progress" style="height: 4px; background-color: #1a2333;">
+                <div class="progress-bar bg-info" style="width: 100%"></div>
+            </div>
+            <span class="position-absolute end-0 bottom-0 p-2 opacity-10 oi oi-warning display-4"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card command-card p-3 position-relative overflow-hidden" style="border-left: 3px solid #ff0055;">
+            <div class="text-muted text-uppercase small fw-bold text-danger">Active Emergencies</div>
+            <div class="display-5 fw-bold my-2 text-danger">@ActiveIncidents</div>
+            <div class="progress" style="height: 4px; background-color: #1a2333;">
+                <div class="progress-bar bg-danger" style="width: @(TotalIncidents > 0 ? (ActiveIncidents * 100 / TotalIncidents) : 0)%"></div>
+            </div>
+            <span class="position-absolute end-0 bottom-0 p-2 opacity-10 oi oi-fire display-4 text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card command-card p-3 position-relative overflow-hidden">
+            <div class="text-muted text-uppercase small fw-bold">Critical Node Level</div>
+            <div class="display-5 fw-bold my-2 text-warning">@CriticalCount</div>
+            <div class="progress" style="height: 4px; background-color: #1a2333;">
+                <div class="progress-bar bg-warning" style="width: @(TotalIncidents > 0 ? (CriticalCount * 100 / TotalIncidents) : 0)%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card command-card p-3 position-relative overflow-hidden" style="border-left: 3px solid #00ffcc;">
+            <div class="text-muted text-uppercase small fw-bold text-success">Resolved Operations</div>
+            <div class="display-5 fw-bold my-2 text-success">@ResolvedIncidents</div>
+            <div class="progress" style="height: 4px; background-color: #1a2333;">
+                <div class="progress-bar bg-success" style="width: @(TotalIncidents > 0 ? (ResolvedIncidents * 100 / TotalIncidents) : 0)%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card command-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="m-0 fw-bold text-uppercase" style="color: var(--accent-cyan);">
+                    <span class="neon-indicator neon-success me-2 animate-pulse"></span> Kharian Sector Overview Matrix
+                </h5>
+                <span class="badge bg-dark border border-secondary text-muted">Telemetry Live</span>
+            </div>
+            
+            <div class="d-flex align-items-center justify-content-center text-center rounded position-relative mb-3"
+                 style="height: 320px; background: radial-gradient(circle, #131d31 0%, #090d15 100%); border: 1px dashed #22344d;">
+                <div>
+                    <div class="spinner-grow text-info mb-2" role="status" style="width: 3rem; height: 3rem;"></div>
+                    <div class="fw-bold text-uppercase tracking-wider">Tactical Map Stream</div>
+                    <small class="text-muted">Leaflet.js Engine ready for initialization on localhost pipeline</small>
+                </div>
+                <div class="position-absolute top-0 start-0 m-3 badge bg-secondary opacity-70">GT Road: Stable</div>
+                <div class="position-absolute bottom-0 end-0 m-3 badge bg-danger opacity-70">Cantt Sector: Alert</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card command-card p-4 h-100">
+            <h5 class="mb-3 fw-bold text-uppercase text-white">Zone Jurisdictions</h5>
+            <div class="list-group list-group-flush bg-transparent">
+                <div class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                    <span>GT Road Zone</span>
+                    <span class="badge bg-warning text-dark">1 Active</span>
+                </div>
+                <div class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                    <span>Kharian Central</span>
+                    <span class="badge bg-danger">1 Critical</span>
+                </div>
+                <div class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                    <span>Cantt Sector</span>
+                    <span class="badge bg-success">Clear</span>
+                </div>
+                <div class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                    <span>Emergency Response Zone</span>
+                    <span class="badge bg-success">Clear</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card command-card p-4">
+            <h5 class="mb-3 fw-bold text-uppercase text-white">Live Incident Stream Log</h5>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-command m-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Incident Title</th>
+                            <th>Zone Location</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned Dept</th>
+                            <th>Reported Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (LatestIncidents == null)
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Awaiting telemetry transmission...</td>
+                            </tr>
+                        }
+                        else if (!LatestIncidents.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">No security incidents active in Kharian sectors.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var incident in LatestIncidents)
+                            {
+                                <tr>
+                                    <td class="fw-bold text-info">#@incident.Id</td>
+                                    <td>@incident.Title</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@incident.Zone.ToString()</span>
+                                    </td>
+                                    <td>
+                                        @if (incident.Priority == PriorityLevel.Critical)
+                                        {
+                                            <span class="text-danger fw-bold"><span class="neon-indicator neon-critical me-1"></span> CRITICAL</span>
+                                        }
+                                        else if (incident.Priority == PriorityLevel.Warning)
+                                        {
+                                            <span class="text-warning fw-bold"><span class="neon-indicator neon-warning me-1"></span> WARNING</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-info"><span class="neon-indicator neon-success me-1"></span> INFO</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge @(incident.Status == IncidentStatus.Open ? "bg-danger" : incident.Status == IncidentStatus.InProgress ? "bg-warning text-dark" : "bg-success")">
+                                            @incident.Status
+                                        </span>
+                                    </td>
+                                    <td>@(incident.AssignedDepartment?.Name ?? "Unassigned")</td>
+                                    <td class="small text-muted">@incident.ReportedAt.ToString("g")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Incident>? LatestIncidents { get; set; }
+    private int TotalIncidents { get; set; }
+    private int ActiveIncidents { get; set; }
+    private int CriticalCount { get; set; }
+    private int ResolvedIncidents { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch real-time metrics safely from our short-lived factory patterns
+        LatestIncidents = await IncidentService.GetIncidentsAsync();
+        
+        TotalIncidents = LatestIncidents.Count;
+        ActiveIncidents = LatestIncidents.Count(i => i.Status == IncidentStatus.Open || i.Status == IncidentStatus.InProgress);
+        CriticalCount = LatestIncidents.Count(i => i.Priority == PriorityLevel.Critical);
+        ResolvedIncidents = LatestIncidents.Count(i => i.Status == IncidentStatus.Resolved || i.Status == IncidentStatus.Closed);
+    }
+}
